@@ -8,11 +8,18 @@
   },
   "dependencies": {
     "bootstrap": "^5.3.2",
+    "bootstrap-vue": "^2.23.1",
+    "bootstrap-vue-3": "^0.5.1",
+    "lodash": "^4.17.21",
+    "pdfmake": "^0.2.7",
     "serve": "^14.2.1",
-    "vue": "^3.2.13",
-    "vue-router": "^4.0.3"
+    "vue": "^3.3.4",
+    "vue-router": "^4.0.3",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.198",
+    "@types/pdfmake": "^0.2.3",
     "@vue/cli-plugin-router": "~5.0.0",
     "@vue/cli-plugin-typescript": "~5.0.0",
     "@vue/cli-service": "~5.0.0",
