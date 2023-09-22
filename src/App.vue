@@ -69,7 +69,7 @@
             <td><b-form-input v-model="newPartQuantity"></b-form-input></td>
             <td>
               <b-button-group>
-                <b-button @click="addNewPart">Изменить</b-button>
+                <b-button @click="editNewPart">Изменить</b-button>
                 <b-button @click="clearNewPart">Отменить</b-button>
               </b-button-group>
             </td>
@@ -155,6 +155,60 @@ export default defineComponent({
 
     // Добавляем новую деталь
     addNewPart() {
+      if (!this.selectedPartId) {
+        const newPartId = `${this.parts.length + 1}`;
+        const newPart: Part = {
+          id: newPartId,
+          name: this.newPartName,
+          price: this.newPartPrice,
+          quantity: this.newPartQuantity,
+          cost: this.newPartPrice * this.newPartQuantity,
+          parentId: null,
+          childCount: 0,
+          children: [],
+        };
+        this.parts.push(newPart);
+      } else {
+        const parentPart = this.findPartById(this.selectedPartId);
+        if (parentPart) {
+          const newPartId = `${parentPart.id}.${parentPart.childCount + 1}`;
+          const newPart: Part = {
+            id: newPartId,
+            name: this.newPartName,
+            price: this.newPartPrice,
+            quantity: this.newPartQuantity,
+            cost: this.newPartPrice * this.newPartQuantity,
+            parentId: parentPart.id,
+            childCount: 0,
+            children: [],
+          };
+          this.parts.push(newPart);
+          parentPart.children.push(newPart);
+          increaseChildCount(parentPart);
+        }
+      }
+
+      // Сбрасываем значения полей и скрываем форму
+      this.selectedPartId = "";
+      this.newPartName = "";
+      this.newPartPrice = 0;
+      this.newPartQuantity = 0;
+      this.newPartCost = 0;
+      this.showNewPartForm = false;
+      this.addDialogVisible = false;
+      this.editMode = false;
+      this.editDialogVisible = false;
+
+      // Пересчитываем цены и стоимости
+      calculatePrices(this.parts);
+      calculateCosts(this.parts);
+      
+      // Сортируем детали по ID
+      this.sortParts();
+    },
+
+    // Редактируем деталь
+    editNewPart() {
   if (!this.selectedPartId) {
     const newPartId = `${this.parts.length + 1}`;
     const newPart: Part = {
